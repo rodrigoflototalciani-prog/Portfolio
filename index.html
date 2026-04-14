@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Portfolio — Rodrigo</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0f0f0f;
+  --ink-soft: #444;
+  --ink-muted: #888;
+  --paper: #f7f5f0;
+  --paper-warm: #ede9e0;
+  --accent: #c8421a;
+  --accent-soft: #f5e0d8;
+  --blue: #1a3d6e;
+  --blue-soft: #dce6f5;
+  --teal: #0d5c4a;
+  --teal-soft: #d4ede7;
+  --purple: #3a2d9a;
+  --purple-soft: #eeeafc;
+  --serif: 'DM Serif Display', Georgia, serif;
+  --sans: 'DM Sans', sans-serif;
+  --mono: 'DM Mono', monospace;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); background: var(--paper); color: var(--ink); font-size: 16px; line-height: 1.7; overflow-x: hidden; }
+
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem 3rem;
+  background: rgba(247,245,240,0.94); backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+.nav-name { font-family: var(--serif); font-size: 1.1rem; color: var(--ink); text-decoration: none; }
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a { font-size: .75rem; font-weight: 500; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-muted); text-decoration: none; transition: color .2s; }
+.nav-links a:hover { color: var(--accent); }
+
+.hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; padding-top: 80px; }
+.hero-left { display: flex; flex-direction: column; justify-content: center; padding: 6rem 4rem 6rem 3rem; border-right: 1px solid rgba(0,0,0,0.08); }
+.hero-eyebrow { font-size: .75rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.5rem; }
+.hero-title { font-family: var(--serif); font-size: clamp(2.6rem, 4.5vw, 4rem); line-height: 1.1; margin-bottom: 1.5rem; }
+.hero-title em { font-style: italic; color: var(--accent); }
+.hero-sub { font-size: 1rem; font-weight: 300; color: var(--ink-soft); max-width: 480px; margin-bottom: 2.5rem; line-height: 1.8; }
+.hero-cta { display: inline-flex; align-items: center; gap: .75rem; background: var(--ink); color: var(--paper); padding: .875rem 2rem; border-radius: 2px; font-size: .875rem; font-weight: 500; letter-spacing: .04em; text-decoration: none; transition: background .2s, transform .15s; width: fit-content; }
+.hero-cta:hover { background: var(--accent); transform: translateY(-1px); }
+.hero-right { display: flex; flex-direction: column; justify-content: center; padding: 6rem 3rem 6rem 4rem; background: var(--paper-warm); }
+.hero-story-label { font-size: .7rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 2rem; }
+.story-item { display: flex; gap: 1.25rem; align-items: flex-start; padding: 1.25rem 0; border-bottom: 1px solid rgba(0,0,0,.07); opacity: 0; transform: translateX(20px); animation: slideIn .5s forwards; }
+.story-item:last-child { border-bottom: none; }
+.story-item:nth-child(1){animation-delay:.1s}.story-item:nth-child(2){animation-delay:.2s}.story-item:nth-child(3){animation-delay:.3s}.story-item:nth-child(4){animation-delay:.4s}
+.story-num { font-family: var(--serif); font-size: 2rem; color: var(--paper-warm); -webkit-text-stroke: 1px var(--ink-muted); min-width: 2rem; line-height: 1; margin-top: .15rem; }
+.story-text strong { display: block; font-weight: 500; font-size: .95rem; margin-bottom: .2rem; }
+.story-text span { font-size: .85rem; color: var(--ink-soft); }
+@keyframes slideIn { to { opacity: 1; transform: translateX(0); } }
+
+section { padding: 7rem 3rem; }
+.section-inner { max-width: 1100px; margin: 0 auto; }
+.section-header { display: flex; align-items: baseline; gap: 1.5rem; margin-bottom: 4rem; padding-bottom: 1.5rem; border-bottom: 1px solid rgba(0,0,0,.1); }
+.section-num { font-family: var(--serif); font-size: 4rem; color: var(--paper-warm); -webkit-text-stroke: 1px rgba(0,0,0,.15); line-height: 1; }
+.section-title { font-family: var(--serif); font-size: 2rem; font-weight: 400; }
+
+.projects { display: flex; flex-direction: column; gap: 2rem; }
+
+.project-card { background: white; border: 1px solid rgba(0,0,0,.07); border-radius: 2px; overflow: hidden; transition: box-shadow .3s; }
+.project-card:hover { box-shadow: 0 8px 40px rgba(0,0,0,.07); }
+
+.card-top { display: grid; grid-template-columns: 180px 1fr auto; gap: 2rem; padding: 2.5rem; align-items: start; cursor: pointer; }
+.card-meta { display: flex; flex-direction: column; gap: 1rem; }
+.project-number { font-family: var(--serif); font-size: 4rem; line-height: 1; color: rgba(0,0,0,.05); }
+.role-badge { display: inline-block; font-size: .68rem; font-weight: 500; letter-spacing: .09em; text-transform: uppercase; padding: .3rem .75rem; border-radius: 2px; }
+.badge-blue { background: var(--blue-soft); color: var(--blue); }
+.badge-teal { background: var(--teal-soft); color: var(--teal); }
+.badge-amber { background: var(--accent-soft); color: var(--accent); }
+.badge-purple { background: var(--purple-soft); color: var(--purple); }
+
+.card-body { display: flex; flex-direction: column; gap: .875rem; }
+.project-title { font-family: var(--serif); font-size: 1.5rem; font-weight: 400; line-height: 1.25; }
+.project-summary { font-size: .9rem; color: var(--ink-soft); line-height: 1.8; font-weight: 300; }
+.card-tags { display: flex; flex-wrap: wrap; gap: .35rem; }
+.tag { font-size: .68rem; padding: .22rem .55rem; background: var(--paper-warm); color: var(--ink-soft); border-radius: 2px; }
+
+.card-right { display: flex; flex-direction: column; align-items: flex-end; gap: 1.5rem; min-width: 140px; }
+.result-box { text-align: right; }
+.result-label { font-size: .65rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-bottom: .3rem; }
+.result-value { font-family: var(--serif); font-size: 1rem; line-height: 1.3; }
+
+.expand-btn { display: flex; align-items: center; gap: .5rem; font-size: .72rem; font-weight: 500; letter-spacing: .07em; text-transform: uppercase; padding: .6rem 1rem; border-radius: 2px; border: 1px solid rgba(0,0,0,.15); background: transparent; cursor: pointer; transition: all .2s; white-space: nowrap; font-family: var(--sans); }
+.expand-btn:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.expand-icon { transition: transform .3s; font-style: normal; display: inline-block; }
+.expand-btn.expanded .expand-icon { transform: rotate(180deg); }
+
+.project-card[data-accent="blue"] .card-top { border-top: 3px solid var(--blue); }
+.project-card[data-accent="teal"] .card-top { border-top: 3px solid var(--teal); }
+.project-card[data-accent="amber"] .card-top { border-top: 3px solid var(--accent); }
+.project-card[data-accent="purple"] .card-top { border-top: 3px solid var(--purple); }
+
+.detail-panel { max-height: 0; overflow: hidden; transition: max-height .55s cubic-bezier(.4,0,.2,1); }
+.detail-panel.open { max-height: 4000px; border-top: 1px solid rgba(0,0,0,.07); }
+.detail-inner { padding: 3rem 2.5rem; background: var(--paper); display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
+
+.detail-section { display: flex; flex-direction: column; gap: 1.5rem; }
+.detail-section-title { font-size: .7rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-muted); padding-bottom: .5rem; border-bottom: 1px solid rgba(0,0,0,.08); }
+.detail-text { font-size: .88rem; color: var(--ink-soft); line-height: 1.8; font-weight: 300; }
+.detail-list { display: flex; flex-direction: column; gap: .6rem; }
+.detail-item { display: flex; gap: .75rem; align-items: flex-start; font-size: .86rem; color: var(--ink-soft); }
+.detail-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); margin-top: .58rem; flex-shrink: 0; }
+.detail-item b { font-weight: 500; color: var(--ink); }
+
+.result-highlight { padding: 1.25rem 1.5rem; background: white; border-left: 3px solid var(--accent); }
+.result-highlight .result-label { text-align: left; margin-bottom: .35rem; }
+.result-highlight .result-value { font-size: 1rem; line-height: 1.5; }
+
+.detail-table { width: 100%; border-collapse: collapse; font-size: .82rem; }
+.detail-table th { background: var(--ink); color: var(--paper); padding: .6rem .875rem; text-align: left; font-weight: 500; font-size: .75rem; }
+.detail-table td { padding: .6rem .875rem; border-bottom: 1px solid rgba(0,0,0,.06); color: var(--ink-soft); }
+.detail-table tr:nth-child(even) td { background: white; }
+.detail-table tr:last-child td { border-bottom: none; }
+
+.code-block { background: #1a1a1a; color: #a8d8a8; padding: 1.25rem 1.5rem; border-radius: 2px; font-family: var(--mono); font-size: .78rem; line-height: 1.8; overflow-x: auto; white-space: pre; }
+.code-comment { color: #666; }
+
+.story-section { background: var(--ink); }
+.story-section .section-num { color: var(--ink); -webkit-text-stroke-color: rgba(255,255,255,.12); }
+.story-section .section-title { color: white; }
+.story-section .section-header { border-bottom-color: rgba(255,255,255,.1); }
+.narrative { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
+.narrative-quote { font-family: var(--serif); font-size: 1.3rem; font-style: italic; color: rgba(255,255,255,.8); line-height: 1.7; }
+.narrative-points { display: flex; flex-direction: column; gap: 1.25rem; }
+.narrative-point { padding: 1.5rem; border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.03); }
+.narrative-point-title { font-size: .72rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin-bottom: .5rem; }
+.narrative-point-text { font-size: .875rem; color: rgba(255,255,255,.6); line-height: 1.75; font-weight: 300; }
+
+.skills-strip { background: var(--paper-warm); padding: 4rem 3rem; border-top: 1px solid rgba(0,0,0,.06); }
+.skills-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(4,1fr); gap: 2rem; }
+.skill-group-title { font-size: .7rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin-bottom: .75rem; }
+.skill-list { list-style: none; display: flex; flex-direction: column; gap: .35rem; }
+.skill-list li { font-size: .825rem; color: var(--ink-soft); font-weight: 300; }
+
+footer { padding: 3rem; border-top: 1px solid rgba(0,0,0,.08); display: flex; align-items: center; justify-content: space-between; }
+.footer-name { font-family: var(--serif); font-size: 1.4rem; }
+.footer-note { font-size: .8rem; color: var(--ink-muted); font-weight: 300; }
+.footer-links { display: flex; gap: 1.5rem; }
+.footer-link { font-size: .78rem; font-weight: 500; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-soft); text-decoration: none; transition: color .2s; }
+.footer-link:hover { color: var(--accent); }
+
+@media(max-width:900px) {
+  .hero{grid-template-columns:1fr}.hero-right{display:none}
+  .card-top{grid-template-columns:1fr;gap:1.5rem}.card-right{align-items:flex-start}
+  .detail-inner{grid-template-columns:1fr}.narrative{grid-template-columns:1fr}
+  .skills-inner{grid-template-columns:1fr 1fr}
+  nav{padding:1rem 1.5rem}.nav-links{display:none}
+  section{padding:4rem 1.5rem}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-name" href="#">Rodrigo</a>
+  <ul class="nav-links">
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#story">Story</a></li>
+    <li><a href="#skills">Skills</a></li>
+  </ul>
+</nav>
+
+<div class="hero">
+  <div class="hero-left">
+    <p class="hero-eyebrow">AI Product Portfolio</p>
+    <h1 class="hero-title">I don't just define<br><em>AI products.</em><br>I build them.</h1>
+    <p class="hero-sub">Senior Product Manager with hands-on experience building, monitoring, and improving AI systems in production — from agentic pipelines to recommendation engines.</p>
+    <a class="hero-cta" href="#projects">See the work ↓</a>
+  </div>
+  <div class="hero-right">
+    <p class="hero-story-label">Four projects. One story.</p>
+    <div class="story-item"><span class="story-num">1</span><div class="story-text"><strong>Built the chatbot</strong><span>Led requirements, testing, and prompt iteration for a live tourist AI assistant</span></div></div>
+    <div class="story-item"><span class="story-num">2</span><div class="story-text"><strong>Monitored it automatically</strong><span>Built a quality agent that reviews every session daily with GPT-4o-mini</span></div></div>
+    <div class="story-item"><span class="story-num">3</span><div class="story-text"><strong>Fixed what was broken</strong><span>Cut false negatives from 40% to 20% through prompt engineering alone</span></div></div>
+    <div class="story-item"><span class="story-num">4</span><div class="story-text"><strong>Made the business case</strong><span>Built a recommendation engine PoC to convince management to invest in personalisation</span></div></div>
+  </div>
+</div>
+
+<section id="projects">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2 class="section-title">The projects</h2>
+    </div>
+    <div class="projects">
+
+      <!-- PROJECT 1 -->
+      <div class="project-card" data-accent="blue">
+        <div class="card-top" onclick="toggleCard(this)">
+          <div class="card-meta">
+            <div class="project-number">01</div>
+            <span class="role-badge badge-blue">Product Lead</span>
+          </div>
+          <div class="card-body">
+            <h3 class="project-title">Conversational AI Chatbot</h3>
+            <p class="project-summary">Led product definition and delivery of a multi-tool AI chatbot serving tourists in real time across 100+ venues, events, weather, and product inclusions.</p>
+            <div class="card-tags"><span class="tag">n8n</span><span class="tag">OpenAI</span><span class="tag">Redis</span><span class="tag">Multi-tool agent</span><span class="tag">Google Sheets</span></div>
+          </div>
+          <div class="card-right">
+            <div class="result-box"><div class="result-label">Status</div><div class="result-value">Live in production</div></div>
+            <button class="expand-btn"><span>Details</span> <i class="expand-icon">↓</i></button>
+          </div>
+        </div>
+        <div class="detail-panel">
+          <div class="detail-inner">
+            <div class="detail-section">
+              <div class="detail-section-title">Context</div>
+              <p class="detail-text">A tourism e-commerce platform needed a conversational AI chatbot to help users get real-time answers about venues, events, weather, and product inclusions. An external technical team built the pipeline. My role was to own the product definition, lead testing, and drive continuous improvement post-launch.</p>
+              <div class="detail-section-title">How the pipeline works</div>
+              <p class="detail-text">Built in n8n, the pipeline receives user messages via webhook, checks Redis for cached responses, then routes to an AI Agent with five data tools: Product API, CMS, event data, weather, and news. Conversation memory preserves context across turns. Every session is logged for downstream quality monitoring.</p>
+              <div class="result-highlight">
+                <div class="result-label">Continuous improvement loop</div>
+                <div class="result-value">Insights from the quality agent (Project 2) feed directly into prompt improvements on this chatbot every week</div>
+              </div>
+            </div>
+            <div class="detail-section">
+              <div class="detail-section-title">My contributions</div>
+              <div class="detail-list">
+                <div class="detail-item"><span class="detail-dot"></span><span><b>Requirements:</b> Full scope definition — use cases, tool integrations, data sources, response behaviour</span></div>
+                <div class="detail-item"><span class="detail-dot"></span><span><b>Testing:</b> End-to-end testing across all tool integrations and edge cases</span></div>
+                <div class="detail-item"><span class="detail-dot"></span><span><b>Languages:</b> Multi-language validation — Dutch, English, German, French, Spanish</span></div>
+                <div class="detail-item"><span class="detail-dot"></span><span><b>Sign-off:</b> Production readiness approval before go-live</span></div>
+                <div class="detail-item"><span class="detail-dot"></span><span><b>Iteration:</b> Ongoing prompt improvement using quality agent insights</span></div>
+              </div>
+              <div class="detail-section-title">At a glance</div>
+              <table class="detail-table">
+                <tr><th>Dimension</th><th>Detail</th></tr>
+                <tr><td>My role</td><td>Product Lead</td></tr>
+                <tr><td>Who built it</td><td>External technical team</td></tr>
+                <tr><td>Status</td><td>Live in production</td></tr>
+                <tr><td>Stack</td><td>n8n · OpenAI · Redis · Google Sheets</td></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROJECT 2 -->
+      <div class="project-card" data-accent="teal">
+        <div class="card-top" onclick="toggleCard(this)">
+          <div class="card-meta">
+            <div class="project-number">02</div>
+            <span class="role-badge badge-teal">Built independently</span>
+          </div>
+          <div class="card-body">
+            <h3 class="project-title">Automated Chatbot Quality Analysis Agent</h3>
+            <p class="project-summary">An agentic pipeline I built entirely independently — analyses every chatbot session daily, scores quality, detects failures, verifies factual accuracy, and sends AI-generated reports automatically.</p>
+            <div class="card-tags"><span class="tag">Google Apps Script</span><span class="tag">GPT-4o-mini</span><span class="tag">BigQuery</span><span class="tag">Looker Studio</span><span class="tag">Agentic pipeline</span></div>
+          </div>
+          <div class="card-right">
+            <div class="result-box"><div class="result-label">Impact</div><div class="result-value">Zero manual review for routine sessions</div></div>
+            <button class="expand-btn"><span>Details</span> <i class="expand-icon">↓</i></button>
+          </div>
+        </div>
+        <div class="detail-panel">
+          <div class="detail-inner">
+            <div class="detail-section">
+              <div class="detail-section-title">The problem I solved</div>
+              <p class="detail-text">After the chatbot went live, manually reviewing hundreds of daily sessions was not scalable. Problems went undetected for days. There was no visibility into which topics caused friction or whether the bot was giving factually correct information. I built this agent independently — no engineering support — to close that gap.</p>
+              <div class="detail-section-title">How it works</div>
+              <div class="detail-list">
+                <div class="detail-item"><span class="detail-dot"></span><span>Reads every new session from Google Sheets, deduplicates against data warehouse</span></div>
+                <div class="detail-item"><span class="detail-dot"></span><span><b>Step 1:</b> GPT-4o-mini scores quality (0–100), detects sentiment, resolution, bot failures, language requests</span></div>
+                <div class="detail-item"><span class="detail-dot"></span><span><b>Step 2:</b> Second LLM pass verifies factual accuracy via fuzzy venue name matching</span></div>
+                <div class="detail-item"><span class="detail-dot"></span><span>Writes structured results to data warehouse, feeds Looker Studio dashboard</span></div>
+                <div class="detail-item"><span class="detail-dot"></span><span>AI-generated daily + weekly email reports with priority fixes and sessions for human review</span></div>
+              </div>
+              <div class="result-highlight">
+                <div class="result-label">Key design decision</div>
+                <div class="result-value">Hard scoring rules in the prompt — negative sentiment caps at 45, unresolved caps at 40 — preventing the LLM from being too generous and keeping scores consistent</div>
+              </div>
+            </div>
+            <div class="detail-section">
+              <div class="detail-section-title">Output schema (per session)</div>
+              <table class="detail-table">
+                <tr><th>Field</th><th>Description</th></tr>
+                <tr><td>quality_score</td><td>0–100 LLM-assigned score</td></tr>
+                <tr><td>sentiment</td><td>positive / neutral / negative</td></tr>
+                <tr><td>resolution</td><td>resolved / partial / unresolved</td></tr>
+                <tr><td>bot_failure</td><td>Boolean — quality or accuracy failure detected</td></tr>
+                <tr><td>language_request</td><td>Boolean — user asked to change language</td></tr>
+                <tr><td>avg_response_time</td><td>Average bot response time in seconds</td></tr>
+              </table>
+              <div class="detail-section-title">Daily report covers</div>
+              <div class="detail-list">
+                <div class="detail-item"><span class="detail-dot"></span><span>Overview · Sentiment &amp; Resolution · Response Time</span></div>
+                <div class="detail-item"><span class="detail-dot"></span><span>Topic Distribution · Bot Failure Analysis with root cause</span></div>
+                <div class="detail-item"><span class="detail-dot"></span><span>Language Support Requests · Priority Fixes</span></div>
+                <div class="detail-item"><span class="detail-dot"></span><span>Sessions requiring human review (score &lt; 40 or unresolved)</span></div>
+              </div>
+            </div>
+          </div>
+          <!-- Code section — full width below the two columns -->
+          <div style="padding: 0 2.5rem 3rem; background: var(--paper);">
+            <div class="detail-section-title" style="margin-bottom: 1rem;">Key code — quality scoring prompt (Google Apps Script)</div>
+            <p class="detail-text" style="margin-bottom: 1rem;">The most critical part of the agent is the LLM prompt that scores each session. Hard ceiling rules are baked in so scores stay consistent regardless of which model version runs. The prompt instructs the LLM to return structured JSON only — no prose — which is then parsed and written directly to BigQuery.</p>
+            <div class="code-block" style="font-size: .76rem;">
+<span class="code-comment">// Step 1: quality analysis — sent to GPT-4o-mini for every session</span>
+const prompt = `You are a strict quality analyst evaluating chatbot conversations.
+Your job is to find problems, not to be nice.
+
+Analyze this conversation and return ONLY valid JSON — no markdown, no explanation.
+
+STEP 1 — Read the full conversation carefully.
+STEP 2 — Look for these problems:
+- Did the user have to ask the same thing more than once?
+- Did the bot give an incomplete or vague answer?
+- Did the bot fail to understand the actual intent?
+- Did the user leave without a clear answer?
+- Did the user ask about changing app language? (any language) → language_request = true
+
+STEP 3 — Score honestly. Most conversations have at least one problem.
+
+Return exactly this JSON:
+{
+  "topic": "activation|usage|inclusions_exclusions|pricing|refunds|technical_issue|other",
+  "sentiment": "positive|neutral|negative",
+  "resolution": "resolved|partial|unresolved|escalated",
+  "bot_failure": true or false,
+  "bot_failure_reason": "specific explanation or null",
+  "quality_score": integer 0-100,
+  "quality_reason": "specific problems found, max 15 words",
+  "language_request": true or false
+}
+
+<span class="code-comment">// Hard scoring rules — prevents LLM from being too generous</span>
+- negative sentiment → maximum score 45
+- neutral sentiment → maximum score 65
+- unresolved conversation → maximum score 40
+- user had to repeat themselves → maximum score 45
+- bot asked for info it already had → maximum score 50`;
+
+<span class="code-comment">// Call GPT-4o-mini, parse JSON response, combine with accuracy check</span>
+const response = UrlFetchApp.fetch('https://api.openai.com/v1/chat/completions', {
+  method: 'post',
+  headers: { 'Authorization': 'Bearer ' + OPENAI_KEY },
+  payload: JSON.stringify({
+    model: 'gpt-4o-mini',
+    temperature: 0.1,  <span class="code-comment">// low temp = consistent scoring</span>
+    messages: [{ role: 'user', content: prompt }]
+  })
+});
+const parsed = JSON.parse(cleanResponse(response));
+
+<span class="code-comment">// Step 2: accuracy check — second LLM pass for venue facts</span>
+const accuracy = checkLocationAccuracy(sessionId, conversation);
+
+<span class="code-comment">// Combine: if accuracy fails, apply penalty to quality score</span>
+const finalScore = Math.max(0,
+  (parsed.quality_score || 50) - (accuracy.accuracy_score_penalty || 0)
+);</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROJECT 3 -->
+      <div class="project-card" data-accent="amber">
+        <div class="card-top" onclick="toggleCard(this)">
+          <div class="card-meta">
+            <div class="project-number">03</div>
+            <span class="role-badge badge-amber">Prompt Engineer</span>
+          </div>
+          <div class="card-body">
+            <h3 class="project-title">Multi-Agent System — Data Retrieval Accuracy</h3>
+            <p class="project-summary">A production multi-agent pipeline was returning "information not available" on 40% of valid queries. Diagnosed the failure mode and cut false negatives by 50% through prompt engineering alone — no code changes.</p>
+            <div class="card-tags"><span class="tag">Multi-agent</span><span class="tag">LLM orchestration</span><span class="tag">MCP tools</span><span class="tag">Prompt engineering</span></div>
+          </div>
+          <div class="card-right">
+            <div class="result-box"><div class="result-label">Result</div><div class="result-value">40% → 20%<br>false negatives</div></div>
+            <button class="expand-btn"><span>Details</span> <i class="expand-icon">↓</i></button>
+          </div>
+        </div>
+        <div class="detail-panel">
+          <div class="detail-inner">
+            <div class="detail-section">
+              <div class="detail-section-title">The system</div>
+              <p class="detail-text">A production multi-agent AI system uses four specialised agents: a chat agent that orchestrates the conversation, a data collection agent that retrieves records via MCP tools, a data processing agent that shapes the data into a response, and a data querying agent that executes against an in-memory database.</p>
+              <div class="detail-section-title">The problem</div>
+              <p class="detail-text">The system responded with "information not available" on ~40% of queries where the data actually existed. Users were told the system couldn't help them when it could. The root cause was not missing data — it was the agents' retrieval behaviour.</p>
+              <div class="result-highlight">
+                <div class="result-label">Root cause identified</div>
+                <div class="result-value">Agents were concluding "not available" before exhausting the full retrieval chain — a tool-calling behaviour problem, not a data problem</div>
+              </div>
+            </div>
+            <div class="detail-section">
+              <div class="detail-section-title">My approach</div>
+              <div class="detail-list">
+                <div class="detail-item"><span class="detail-dot"></span><span><b>Diagnosis:</b> Reviewed failure patterns to identify which agent in the chain was breaking down</span></div>
+                <div class="detail-item"><span class="detail-dot"></span><span><b>Hypotheses:</b> Formed testable theories about prompt instructions causing premature conclusions</span></div>
+                <div class="detail-item"><span class="detail-dot"></span><span><b>Iteration:</b> Added explicit instructions — agents must exhaust all available tools before concluding unavailable</span></div>
+                <div class="detail-item"><span class="detail-dot"></span><span><b>Reasoning:</b> Added step-by-step guidance to ensure agents complete the full retrieval chain</span></div>
+                <div class="detail-item"><span class="detail-dot"></span><span><b>Testing:</b> Validated each iteration against known failure cases</span></div>
+              </div>
+              <div class="detail-section-title">Results</div>
+              <table class="detail-table">
+                <tr><th>Metric</th><th>Before</th><th>After</th></tr>
+                <tr><td>False negative rate</td><td>~40%</td><td>~20%</td></tr>
+                <tr><td>Reduction</td><td>—</td><td>~50%</td></tr>
+                <tr><td>Method</td><td>—</td><td>Prompt engineering only</td></tr>
+                <tr><td>Code changes</td><td>—</td><td>None required</td></tr>
+                <tr><td>Status</td><td>—</td><td>Ongoing — further reduction targeted</td></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROJECT 4 -->
+      <div class="project-card" data-accent="purple">
+        <div class="card-top" onclick="toggleCard(this)">
+          <div class="card-meta">
+            <div class="project-number">04</div>
+            <span class="role-badge badge-purple">Built independently</span>
+          </div>
+          <div class="card-body">
+            <h3 class="project-title">Personalised Recommendation Engine PoC</h3>
+            <p class="project-summary">Built a working recommendation engine to make the business case to management — solving cold start for one-time tourists and popularity bias across 100+ venues using collaborative filtering.</p>
+            <div class="card-tags"><span class="tag">Python</span><span class="tag">scikit-learn</span><span class="tag">Collaborative filtering</span><span class="tag">Cold start</span><span class="tag">IDF weighting</span></div>
+          </div>
+          <div class="card-right">
+            <div class="result-box"><div class="result-label">Purpose</div><div class="result-value">Business case for MT investment</div></div>
+            <button class="expand-btn"><span>Details + code</span> <i class="expand-icon">↓</i></button>
+          </div>
+        </div>
+        <div class="detail-panel">
+          <div class="detail-inner">
+            <div class="detail-section">
+              <div class="detail-section-title">The problem</div>
+              <p class="detail-text">The chatbot was recommending the same 10–15 famous venues to every tourist, ignoring 100+ others. Two business problems: tourists got a generic experience, and most venue partners received almost zero referral traffic from the app. The core technical challenge: most tourists are one-time visitors — there is no visit history to learn from on day one.</p>
+              <div class="detail-section-title">Three-layer solution</div>
+              <div class="detail-list">
+                <div class="detail-item"><span class="detail-dot"></span><span><b>Cold start:</b> Onboarding traveller type (Explorer / Art Lover / History Buff / Science Enthusiast) gives instant personalisation before any visits</span></div>
+                <div class="detail-item"><span class="detail-dot"></span><span><b>Collaborative filtering:</b> As visits accumulate, cosine similarity finds past tourists with similar patterns — weighted by similarity score</span></div>
+                <div class="detail-item"><span class="detail-dot"></span><span><b>IDF weighting:</b> log(N/visits) boosts rare venues so they compete fairly with popular ones</span></div>
+                <div class="detail-item"><span class="detail-dot"></span><span><b>Category cap:</b> Max 2 per category forces variety — no five art museums in a row</span></div>
+              </div>
+            </div>
+            <div class="detail-section">
+              <div class="detail-section-title">Core scoring logic</div>
+              <div class="code-block"><span class="code-comment"># Similarity-weighted CF score</span>
+score = Σ(similarity × rating) / Σ(similarity)
+
+<span class="code-comment"># IDF — reduces popularity bias</span>
+idf = log(N / visit_count)
+final = (1-w) × score + w × score × idf_norm
+
+<span class="code-comment"># Cold start confidence blend</span>
+cf_conf = min(1.0, len(visited) / 5)
+score = cf_conf × cf_score
+      + (1 - cf_conf) × popularity
+      + profile_boost</div>
+              <div class="detail-section-title">PoC → production roadmap</div>
+              <table class="detail-table">
+                <tr><th>Component</th><th>PoC</th><th>Production</th></tr>
+                <tr><td>Data source</td><td>Synthetic matrix</td><td>Historical visit data</td></tr>
+                <tr><td>Integration</td><td>Standalone script</td><td>API endpoint</td></tr>
+                <tr><td>Retraining</td><td>Manual</td><td>Nightly scheduled job</td></tr>
+                <tr><td>Success metric</td><td>None</td><td>Venue coverage + acceptance rate</td></tr>
+              </table>
+            </div>
+          </div>
+          <!-- Code section — full width below the two columns -->
+          <div style="padding: 0 2.5rem 3rem; background: var(--paper);">
+            <div class="detail-section-title" style="margin-bottom: 1rem;">Key code — cold start profile boost (Python)</div>
+            <p class="detail-text" style="margin-bottom: 1rem;">This function converts the onboarding traveller type directly into a recommendation score boost. Venues shared across multiple profiles accumulate stacked boosts automatically — no special logic needed. This is what makes personalisation possible from minute one, before any visit history exists.</p>
+            <div class="code-block" style="font-size: .76rem;"><span class="code-comment"># Traveller types from onboarding — mapped to real venue lists</span>
+TRAVELLER_PROFILES = {
+    "Explorer":           ["City Canal Cruise", "ARTIS Zoo", "Zaanse Schans", ...],
+    "Art Lover":          ["Foam Photography Museum", "Stedelijk Museum", "STRAAT", ...],
+    "History Buff":       ["Rijksmuseum", "Rembrandt House", "National Maritime Museum", ...],
+    "Science Enthusiast": ["NEMO Science Museum", "ARTIS-Micropia", "Teylers Museum", ...],
+}
+
+def build_profile_boost(*traveller_types: str) -> dict:
+    """
+    Convert onboarding traveller type(s) into a score boost dict.
+    Venues in multiple profiles get stacked boosts automatically.
+
+    Example:
+        build_profile_boost("Art Lover")
+        → {"Foam Photography Museum": 0.3, "Stedelijk Museum": 0.3, ...}
+
+        build_profile_boost("Art Lover", "Science Enthusiast")
+        → {"Nxt Museum": 0.6, ...}  ← appears in both, boost doubles
+    """
+    boost = {}
+    for t in traveller_types:
+        matched = next(
+            (k for k in TRAVELLER_PROFILES if k.lower() == t.lower()), None
+        )
+        if not matched:
+            print(f"[WARN] Unknown type '{t}'")
+            continue
+        for venue in TRAVELLER_PROFILES[matched]:
+            boost[venue] = boost.get(venue, 0) + 0.3  <span class="code-comment"># stack if in multiple profiles</span>
+    return boost
+
+<span class="code-comment"># Usage — called at cold start when user has zero visit history</span>
+boost = build_profile_boost("Art Lover")
+recs  = recommender.recommend_cold(visited=[], profile_boost=boost, n=5)
+
+<span class="code-comment"># As visits accumulate, CF confidence grows and blends in</span>
+cf_confidence = min(1.0, len(visited) / 5)
+score = cf_confidence * cf_score \
+      + (1 - cf_confidence) * popularity \
+      + profile_boost.get(venue, 0)</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="story" class="story-section">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2 class="section-title">The story behind the work</h2>
+    </div>
+    <div class="narrative">
+      <p class="narrative-quote">"These aren't four separate experiments. They're one continuous loop — identify the problem, build the solution, measure the result, feed it back in."</p>
+      <div class="narrative-points">
+        <div class="narrative-point">
+          <div class="narrative-point-title">Identify</div>
+          <div class="narrative-point-text">I spotted that the chatbot had no quality feedback loop. No one knew which sessions were failing. I built the quality agent to close that gap — without waiting for engineering resources or budget approval.</div>
+        </div>
+        <div class="narrative-point">
+          <div class="narrative-point-title">Build</div>
+          <div class="narrative-point-text">Both the quality agent and the recommendation engine were built independently using AI-assisted coding. Not just prototyped — actually deployed and running. The recommendation engine was built specifically to make a business case, not just to demonstrate technical knowledge.</div>
+        </div>
+        <div class="narrative-point">
+          <div class="narrative-point-title">Improve</div>
+          <div class="narrative-point-text">Quality agent insights feed directly into prompt improvements on the live chatbot. The 40% → 20% false negative reduction came from the same systematic approach: measure, hypothesise, iterate, test.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="skills-strip">
+  <div class="skills-inner">
+    <div>
+      <p class="skill-group-title">AI & LLMs</p>
+      <ul class="skill-list"><li>LLM orchestration</li><li>Prompt engineering</li><li>Agentic workflows</li><li>Multi-agent systems</li><li>RAG architecture</li><li>GPT-4o / GPT-4o-mini</li></ul>
+    </div>
+    <div>
+      <p class="skill-group-title">Build & Prototype</p>
+      <ul class="skill-list"><li>Python (ML / data)</li><li>Google Apps Script</li><li>n8n pipelines</li><li>AI-assisted coding</li><li>REST API integration</li><li>scikit-learn</li></ul>
+    </div>
+    <div>
+      <p class="skill-group-title">Data & Infrastructure</p>
+      <ul class="skill-list"><li>BigQuery</li><li>Looker Studio</li><li>Google Sheets API</li><li>Redis caching</li><li>Data pipeline design</li><li>Incremental sync</li></ul>
+    </div>
+    <div>
+      <p class="skill-group-title">Product</p>
+      <ul class="skill-list"><li>AI opportunity identification</li><li>Rapid prototyping</li><li>Vendor management</li><li>Performance monitoring</li><li>Business case development</li><li>Stakeholder communication</li></ul>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div>
+    <p class="footer-name">Rodrigo</p>
+    <p class="footer-note">Senior Product Manager · Amsterdam</p>
+  </div>
+  <div class="footer-links">
+    <a class="footer-link" href="https://colab.research.google.com/your-link-here" target="_blank">Recommender notebook ↗</a>
+    <a class="footer-link" href="https://github.com/your-username" target="_blank">GitHub ↗</a>
+  </div>
+</footer>
+
+<script>
+function toggleCard(cardTop) {
+  const card = cardTop.closest('.project-card');
+  const panel = card.querySelector('.detail-panel');
+  const btn = card.querySelector('.expand-btn');
+  const isOpen = panel.classList.contains('open');
+  document.querySelectorAll('.detail-panel.open').forEach(p => {
+    p.classList.remove('open');
+    p.closest('.project-card').querySelector('.expand-btn').classList.remove('expanded');
+  });
+  if (!isOpen) {
+    panel.classList.add('open');
+    btn.classList.add('expanded');
+    setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+  }
+}
+</script>
+</body>
+</html>
